@@ -11,7 +11,7 @@
 
 	<!-- Build Properties -->
 	<PropertyGroup>
-		<TargetFramework>net48</TargetFramework>
+		<TargetFramework>netstandard2.1</TargetFramework>
 		<Configurations>Debug;Release2</Configurations>
 		<AssemblyName>$(PackageId)</AssemblyName>
 		<RootNamespace>$(PackageId)</RootNamespace>
@@ -49,7 +49,11 @@
 	<ItemGroup>
 
 		<Reference Include="ONITwitchLib">
-			<HintPath>..\..\..\Lib\ONITwitchLib.dll</HintPath>
+			<!-- Self-contained: ONITwitchLib.dll (v1.2.9) lives in the repo's Lib/ folder.
+			     Bundled into the mod via ILRepack so no runtime dependency on the Twitch mod. -->
+			<HintPath>..\Lib\ONITwitchLib.dll</HintPath>
+			<!-- External (not bundled), matching the shipped mod; twitch code is runtime-guarded. -->
+			<Private>False</Private>
 		</Reference>
 
 		<Reference Include="Unity.TextMeshPro">

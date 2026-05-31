@@ -233,7 +233,13 @@ namespace PrintingPodRecharge.Content.Cmps
 		{
 			if (dupe != null && dupe.TryGetComponent(out CustomDupe dye))
 			{
-				if (dupe.TryGetComponent(out MinionIdentity identity))
+				// U59 fix: every dupe (vanilla included) gets a CustomDupe component via MinionConfigPatch,
+				// but only printed/custom dupes have a real descKey. Without this guard, Apply() overwrote
+				// vanilla dupes' personalityResourceId with an empty descKey (0x0), crashing every screen
+				// that reads the personality (skills, to-do side screen). Only apply a valid personality id.
+				if (dupe.TryGetComponent(out MinionIdentity identity)
+					&& !string.IsNullOrEmpty(dye.descKey)
+					&& Db.Get().Personalities.TryGet(dye.descKey) != null)
 				{
 					identity.personalityResourceId = dye.descKey;
 				}

@@ -4,10 +4,10 @@ namespace PrintingPodRecharge.Patches
 {
     public class WorkerPatch
     {
-        //[HarmonyPatch(typeof(Worker), "AttachOverrideAnims")]
+        //[HarmonyPatch(typeof(WorkerBase), "AttachOverrideAnims")]
         public class Worker_AttachOverrideAnims_Patch
         {
-            public static void Postfix(Worker __instance, KAnimControllerBase worker_controller)
+            public static void Postfix(WorkerBase __instance, KAnimControllerBase worker_controller)
             {
                 if (__instance != null)
                 {

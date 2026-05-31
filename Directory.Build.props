@@ -63,7 +63,9 @@
 			<HintPath>$(GameLibsFolder)/0Harmony.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
-		
+
+
+
 		<Reference Include="UnityEngine">
 			<HintPath>$(GameLibsFolder)/UnityEngine.dll</HintPath>
 			<Private>False</Private>
@@ -82,9 +84,9 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(FUtility)' == 'true' ">
-		<ProjectReference Include="..\FUtility\FUtility.csproj">
-			<ExcludeAssets>runtime</ExcludeAssets>
-		</ProjectReference>
+		<!-- No ExcludeAssets: let FUtility.dll land in the output dir so ILRepack bundles it into the
+		     mod (matches how the shipped PrintingPodRecharge.dll has FUtility merged in). -->
+		<ProjectReference Include="..\FUtility\FUtility.csproj" />
 	</ItemGroup>
 	
 	<ItemGroup Condition="'$(FUtility2)' == 'true' ">
@@ -97,5 +99,6 @@
 	<ItemGroup Condition="'$(IsPacked)' == 'true'">
 		<PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.2" />
 	</ItemGroup>
+
 
 </Project>

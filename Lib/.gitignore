@@ -1,0 +1,4 @@
+# Third-party build dependency DLLs live here but are not committed (see README.md).
+*.dll
+!.gitignore
+!README.md

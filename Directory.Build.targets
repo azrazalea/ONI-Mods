@@ -52,7 +52,10 @@ APIVersion: $(APIVersion)
       OutputFile="$(TargetPath)"/>
   </Target>
 
-  <Target Name="CopyModFiles" AfterTargets="ILRepack" Condition="'$(AssemblyName)' != 'FUtility' and '$(AssemblyName)' != 'FUtilityArt'">
+  <!-- Gated behind DeployDevMod (default off). When GenerateMetadata=false there's no mod.yaml/mod_info.yaml
+       to copy, so this used to xcopy only the DLL and leave a metadata-less mod in mods\dev that crashes
+       the Mod Manager. We deploy by copying the DLL into the real mod folder ourselves instead. -->
+  <Target Name="CopyModFiles" AfterTargets="ILRepack" Condition="'$(DeployDevMod)' == 'true' and '$(AssemblyName)' != 'FUtility' and '$(AssemblyName)' != 'FUtilityArt'">
     <Exec Command="xcopy /yqsr &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(ModFolder)\$(TargetName)_dev\&quot;"/>
     <Exec Command="xcopy /yqsr &quot;$(TargetDir)mod.yaml&quot; &quot;$(ModFolder)\$(TargetName)_dev\&quot;"/>
     <Exec Command="xcopy /yqsr &quot;$(TargetDir)mod_info.yaml&quot; &quot;$(ModFolder)\$(TargetName)_dev\&quot;"/>

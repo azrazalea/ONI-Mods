@@ -25,6 +25,13 @@ namespace PrintingPodRecharge.UI
 		private LocText actionButtonLabel;
 		private LocText cancelButtonLabel;
 
+		// U59: SideScreenContent.GetTitle() returns Strings.Get(titleKey); this side screen never set
+		// titleKey, so U59 rendered the header as "Missing.". Provide the title aki already wrote.
+		public override string GetTitle()
+		{
+			return STRINGS.UI.SETTINGSDIALOG.TITLE.TITLETEXT;
+		}
+
 		protected override void OnPrefabInit()
 		{
 			base.OnPrefabInit();
@@ -170,7 +177,8 @@ namespace PrintingPodRecharge.UI
 
 			foreach (var option in options)
 			{
-				newOptions.Add(new TMP_Dropdown.OptionData(option.name, option.sprite));
+				// U59 TextMeshPro removed the OptionData(string, Sprite) ctor; use the (string, Sprite, Color) one.
+				newOptions.Add(new TMP_Dropdown.OptionData(option.name, option.sprite, Color.white));
 			}
 
 			dropdown.AddOptions(newOptions);
