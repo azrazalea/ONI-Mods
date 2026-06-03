@@ -11,6 +11,8 @@
         Shaker,
         Twitch,
         TwitchHelpful,
-        Medicinal
+        Medicinal,
+        Bionic,
+        Gourmet
     }
 }

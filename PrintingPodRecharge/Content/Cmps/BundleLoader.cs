@@ -32,6 +32,9 @@ namespace PrintingPodRecharge.Content.Cmps
                             case Bundle.Food:
                                 GenerateFoodPackages(bundle, infos);
                                 break;
+                            case Bundle.Gourmet:
+                                GenerateGourmetPackages(bundle, infos);
+                                break;
                             case Bundle.Egg:
                                 GenerateEggPackages(bundle, infos);
                                 break;
@@ -296,6 +299,51 @@ namespace PrintingPodRecharge.Content.Cmps
                     });
 
                     infos.Add(highTier);
+                }
+            }
+
+            definedPackages.Recycle();
+        }
+
+        // Gourmet bundle: only high-quality dishes (quality >= Great). One entry per qualifying food,
+        // amount sized to the bundle's KcalUnit. (The basic Food bundle already lets high-quality food
+        // turn up rarely; this bundle is the reliable high-end trade.)
+        private static void GenerateGourmetPackages(BundleData bundle, List<CarePackageInfo> infos)
+        {
+            if (bundle.OverrideInternalLogic)
+            {
+                return;
+            }
+
+            var definedPackages = ListPool<string, BundleLoader>.Allocate();
+
+            foreach (var package in bundle.Packages)
+            {
+                definedPackages.Add(package.PrefabID);
+            }
+
+            var kcalUnit = bundle.GetOrDefault("KcalUnit", 4000);
+
+            var foods = Assets.GetPrefabsWithComponent<Edible>();
+            foreach (var food in foods)
+            {
+                var id = food.PrefabID().ToString();
+
+                if (definedPackages.Contains(id) || bundle.BlackList.Contains(id))
+                {
+                    continue;
+                }
+
+                if (food.TryGetComponent(out Edible edible))
+                {
+                    var foodInfo = edible.FoodInfo;
+                    if (foodInfo.Quality < TUNING.FOOD.FOOD_QUALITY_GREAT)
+                    {
+                        continue;
+                    }
+
+                    var kcalPerUnit = foodInfo.CaloriesPerUnit / 1000f;
+                    infos.Add(new CarePackageInfo(id, KCalToCount(kcalUnit, kcalPerUnit), null));
                 }
             }
 

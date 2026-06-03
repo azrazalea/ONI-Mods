@@ -1,4 +1,4 @@
-﻿using FUtility;
+using FUtility;
 using Newtonsoft.Json;
 using PrintingPodRecharge.Content.Cmps;
 using PrintingPodRecharge.Content.Items;
@@ -29,7 +29,9 @@ namespace PrintingPodRecharge.DataGen
 			{ Bundle.Seed, "seedy_bioink" },
 			{ Bundle.Medicinal, "medicinal_bioink" },
 			{ Bundle.Twitch, "twitch_bioink" },
-			{ Bundle.TwitchHelpful, "twitch_bioink_helpful" }
+			{ Bundle.TwitchHelpful, "twitch_bioink_helpful" },
+			{ Bundle.Bionic, "bionic_bioink" },
+			{ Bundle.Gourmet, "gourmet_bioink" }
 		};
 
 		public static void Generate(string path, bool force)
@@ -48,13 +50,15 @@ namespace PrintingPodRecharge.DataGen
 			CreatePack(path, fileNames[Bundle.Medicinal], force, GenerateMedicinal);
 			CreatePack(path, fileNames[Bundle.Twitch], force, GenerateTwitch);
 			CreatePack(path, fileNames[Bundle.TwitchHelpful], force, GenerateTwitchHelpful);
+			CreatePack(path, fileNames[Bundle.Bionic], force, GenerateBionic);
+			CreatePack(path, fileNames[Bundle.Gourmet], force, GenerateGourmet);
 		}
 
 		private static void CreatePack(string folder, string fileName, bool force, Func<BundleData> bundlegen)
 		{
 			var filePath = Path.Combine(folder, fileName + ".json");
 
-			Log.Debuglog($"Creating pack {filePath}. {File.Exists(filePath)}");
+			Log.Debug($"Creating pack {filePath}. {File.Exists(filePath)}");
 			if (force || !File.Exists(filePath))
 			{
 				Write(filePath, bundlegen());
@@ -124,7 +128,7 @@ namespace PrintingPodRecharge.DataGen
 					}
 
 					oldData.Packages.AddRange(newData);
-					Log.Debuglog($"Added {newData.Count} new packages to {(Bundle)bundle}");
+					Log.Debug($"Added {newData.Count} new packages to {(Bundle)bundle}");
 
 					var json = JsonConvert.SerializeObject(oldData, Formatting.Indented, new JsonSerializerSettings
 					{
@@ -546,6 +550,24 @@ namespace PrintingPodRecharge.DataGen
 			return result;
 		}
 
+		// Gourmet food bundle: only high-quality dishes (filtered in BundleLoader). Fewer, richer
+		// items than the basic food bundle; warm gold to match the Gourmet ink.
+		private static BundleData GenerateGourmet()
+		{
+			return new BundleData()
+			{
+				Bundle = Bundle.Gourmet,
+				ColorHex = "d4a72a",
+				EnabledWithNoSpecialCarepackages = false,
+				DuplicantCount = BundleData.MinMax.None,
+				ItemCount = new BundleData.MinMax(3, 3),
+				Data = new Dictionary<string, float>()
+				{
+					{ "KcalUnit", 4000 },
+				}
+			};
+		}
+
 		public const float MINIMUM = 100;
 		public const float MODEST = 300;
 		public const float GENEROUS = 800;
@@ -671,6 +693,36 @@ namespace PrintingPodRecharge.DataGen
 					{ "MidTierCycle", 40 },
 					{ "HighTierCycle", 120 },
 				},
+				Packages = packages
+			};
+		}
+
+		// Emergency Bionic survival kit. Always offers every eligible option (ItemCount = pool size;
+		// the pod's 20-retry sibling de-dup guarantees distinct picks up to the pool size). Wood/Peat
+		// auto-drop on saves without the Frosty/Prehistoric packs (their element prefab won't exist).
+		// Fuel amounts are energy-referenced to 3000 kg coal = 1.8 MJ at a Coal Generator:
+		//   Coal 3000 (1.8 MJ) | Wood 3600 (~0.9 MJ, half-parity) | Peat 3000 (~1.44 MJ)
+		// Metal Power Banks are deliberately UNDER energy-parity (parity would be 15): they're finished
+		// goods eaten directly with zero infrastructure and zero conversion loss, whereas fuel must run
+		// a generator + charger (~83% efficient) you have to build and run. 8 banks = ~2 cycles of full
+		// survival for 4 bionics: a real instant lifeline, but fuel is the better deal if you can convert it.
+		private static BundleData GenerateBionic()
+		{
+			var packages = new List<PackageData>
+			{
+				new PackageData("DisposableElectrobank_RawMetal", 8),
+				new PackageData(SimHashes.Carbon.ToString(), 3000),
+				new PackageData(SimHashes.WoodLog.ToString(), 3600),
+				new PackageData(SimHashes.Peat.ToString(), 3000),
+			};
+
+			return new BundleData()
+			{
+				Bundle = Bundle.Bionic,
+				ColorHex = "3ac0d4",
+				EnabledWithNoSpecialCarepackages = false,
+				DuplicantCount = BundleData.MinMax.None,
+				ItemCount = new BundleData.MinMax(4, 4),
 				Packages = packages
 			};
 		}

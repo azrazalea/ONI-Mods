@@ -93,7 +93,13 @@ namespace PrintingPodRecharge
             public static class FOOD_BIO_INK
             {
                 public static LocString NAME = Utils.FormatAsLink("Nutritious Bio-Ink", BioInkConfig.FOOD);
-                public static LocString DESC = "Collected unused printing material of a Printing pod. Makes new printables only edible items.";
+                public static LocString DESC = "Collected unused printing material of a Printing pod, infused with basic food. Makes new printables edible items - and just maybe something finer.";
+            }
+
+            public static class GOURMET_BIO_INK
+            {
+                public static LocString NAME = Utils.FormatAsLink("Gourmet Bio-Ink", BioInkConfig.GOURMET);
+                public static LocString DESC = "Collected unused printing material of a Printing pod, infused with fine cuisine. Makes new printables high-quality food - trade one delicacy for another.";
             }
 
             public static class SHAKER_BIO_INK
@@ -119,6 +125,12 @@ namespace PrintingPodRecharge
             {
                 public static LocString NAME = Utils.FormatAsLink("Metallic Bio-Ink", BioInkConfig.METALLIC);
                 public static LocString DESC = "Collected unused printing material of a Printing pod. Allows immediate recharging of a Printing Pod, and causes new printables to be metals and metal ores.";
+            }
+
+            public static class BIONIC_BIO_INK
+            {
+                public static LocString NAME = Utils.FormatAsLink("Bionic Bio-Ink", BioInkConfig.BIONIC);
+                public static LocString DESC = "Collected unused printing material of a Printing pod, charged with salvaged Microchips. Makes new printables an emergency Bionic survival kit: a stack of Metal Power Banks for an immediate revival, or a bulk drop of generator fuel — Coal, Wood, or Peat — to rebuild your power.";
             }
 
             public static class VACILLATING_BIO_INK

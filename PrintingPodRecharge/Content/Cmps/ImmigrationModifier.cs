@@ -1,4 +1,4 @@
-﻿using FUtility;
+using FUtility;
 using KSerialization;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +52,14 @@ namespace PrintingPodRecharge.Content.Cmps
                 return DebugHandler.InstantBuildMode || Game.Instance.SandboxModeActive || Mod.otherMods.IsDiseasesExpandedHere;
             }
 
+            // Bionic Bio-Ink needs the Bionic Booster Pack (DLC3): without it there are no Microchips
+            // to craft it and its core reward (Metal Power Banks) doesn't exist, so hide it from the
+            // selector instead of showing an uncraftable option.
+            if (bundle == Bundle.Bionic)
+            {
+                return DebugHandler.InstantBuildMode || Game.Instance.SandboxModeActive || DlcManager.IsContentSubscribed(DlcManager.DLC3_ID);
+            }
+
             return true;
         }
 
@@ -72,13 +80,13 @@ namespace PrintingPodRecharge.Content.Cmps
 
         public void SetRefund(Bundle bundle)
         {
-            Log.Debuglog("set refund to " + bundle);
+            Log.Debug("set refund to " + bundle);
             refundBundle = bundle;
         }
 
         public void SetModifier(Bundle bundle)
         {
-            Log.Debuglog("Set modifier to " + bundle.ToString());
+            Log.Debug("Set modifier to " + bundle.ToString());
             selectedBundle = bundle;
 
             if (bundle == Bundle.None)
@@ -128,7 +136,7 @@ namespace PrintingPodRecharge.Content.Cmps
                 return null;
             }
 
-            Log.Debuglog("Selecting package from " + infos.Count);
+            Log.Debug("Selecting package from " + infos.Count);
 
             return infos.GetRandom();
         }
