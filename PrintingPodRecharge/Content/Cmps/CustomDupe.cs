@@ -1,4 +1,4 @@
-﻿using FUtility;
+using FUtility;
 using HarmonyLib;
 using KSerialization;
 using System;
@@ -48,14 +48,15 @@ namespace PrintingPodRecharge.Content.Cmps
 		[Serialize]
 		public bool dyedHair;
 
+		// Assigned by Klei's component injection (OnPrefabInit); initialized to satisfy the compiler.
 		[MyCmpReq]
-		private KBatchedAnimController kbac;
+		private KBatchedAnimController kbac = null;
 
 		[MyCmpReq]
-		private MinionIdentity identity;
+		private MinionIdentity identity = null;
 
 		[MyCmpReq]
-		private Accessorizer accessorizer;
+		private Accessorizer accessorizer = null;
 
 		private HashedString serializedHair;
 
@@ -94,7 +95,7 @@ namespace PrintingPodRecharge.Content.Cmps
 				|| Db.Get().Personalities.TryGet(identity.personalityResourceId) == null)
 
 			{
-				Log.Debuglog("personalityResourceId Invalid");
+				Log.Debug("personalityResourceId Invalid");
 				Personality personality = null;
 
 				if (Mod.otherMods.IsMeepHere)
@@ -138,7 +139,7 @@ namespace PrintingPodRecharge.Content.Cmps
 		{
 			if (forceUpdateAccessories)
 			{
-				Log.Debuglog("force update");
+				Log.Debug("force update");
 				var p = Db.Get().Personalities.Get(identity.personalityResourceId);
 				accessorizer.ApplyMinionPersonality(p);
 			}
@@ -323,7 +324,7 @@ namespace PrintingPodRecharge.Content.Cmps
 			}
 			else
 			{
-				Log.Debuglog("symbol was null");
+				Log.Debug("symbol was null");
 			}
 
 			kbac.SetSymbolTint("snapto_hair_always", color);

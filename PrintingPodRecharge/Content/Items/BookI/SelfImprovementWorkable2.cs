@@ -7,8 +7,9 @@ namespace PrintingPodRecharge.Content.Items.BookI
 {
     public class SelfImprovementWorkable2 : Workable
     {
+        // Assigned by Klei's component injection (OnPrefabInit); initialized to satisfy the compiler.
         [MyCmpReq]
-        private SelfImprovement book;
+        private SelfImprovement book = null;
 
         private Chore chore;
 

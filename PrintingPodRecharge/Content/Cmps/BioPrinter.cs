@@ -20,11 +20,12 @@ namespace PrintingPodRecharge.Content.Cmps
         [SerializeField]
         public Storage storage;
 
+        // Assigned by Klei's component injection (OnPrefabInit); initialized to satisfy the compiler.
         [MyCmpReq]
-        private KSelectable kSelectable;
+        private KSelectable kSelectable = null;
 
         [MyCmpReq]
-        private ManualDeliveryKG delivery;
+        private ManualDeliveryKG delivery = null;
 
         [Serialize]
         public bool isDeliveryActive;

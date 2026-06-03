@@ -1,4 +1,4 @@
-﻿using FUtility;
+using FUtility;
 
 namespace PrintingPodRecharge.Settings
 {
@@ -10,7 +10,7 @@ namespace PrintingPodRecharge.Settings
         {
             if(Mod.errorOverrides != null)
             {
-                Log.Debuglog("rolling an ERR0R dupe");
+                Log.Debug("rolling an ERR0R dupe");
                 return Mod.errorOverrides;
             }
 

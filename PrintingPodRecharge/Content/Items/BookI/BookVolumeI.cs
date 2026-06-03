@@ -1,4 +1,4 @@
-﻿using FUtility;
+using FUtility;
 using Klei.AI;
 using System;
 using System.Collections.Generic;
@@ -58,11 +58,11 @@ namespace PrintingPodRecharge.Content.Items.BookI
         {
             var str = (string)STRINGS.ITEMS.STATUSITEMS.PRINTINGPODRECHARGE_ASSIGNEDTO.NAME;
 
-			Log.Debuglog($"0 {str}");
-			Log.Debuglog($"name {minionIdentity.GetProperName()}");
+			Log.Debug($"0 {str}");
+			Log.Debug($"name {minionIdentity.GetProperName()}");
 			str = str.Replace("{Assignee}", minionIdentity.GetProperName());
 
-            Log.Debuglog($"1 {str}");
+            Log.Debug($"1 {str}");
 
             GetMinionIdentity(assignee, out var identity, out var storedIdentity);
 
@@ -81,12 +81,12 @@ namespace PrintingPodRecharge.Content.Items.BookI
                 if (ModAssets.badTraits.Contains(trait))
                 {
                     str = str.Replace("{Data}", Db.Get().traits.Get(trait).Name);
-					Log.Debuglog($"2 {str}");
+					Log.Debug($"2 {str}");
 					break;
                 }
             }
 
-			Log.Debuglog(str);
+			Log.Debug(str);
 			return str;
         }
     }

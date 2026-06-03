@@ -7,11 +7,12 @@ namespace PrintingPodRecharge.Content.Items.BookI
 {
     public class SelfImprovement : Assignable, IGameObjectEffectDescriptor
     {
+        // Assigned by Klei's component injection (OnPrefabInit); initialized to satisfy the compiler.
         [MyCmpAdd]
-        private SelfImprovementWorkable2 workable;
+        private SelfImprovementWorkable2 workable = null;
 
         [MyCmpGet]
-        private KSelectable kSelectable;
+        private KSelectable kSelectable = null;
 
         [SerializeField]
         public string workableAnim = "anim_react_thumbsup_kanim";

@@ -10,8 +10,9 @@ namespace PrintingPodRecharge.UI
         [SerializeField]
         public TextMeshProUGUI targetText;
 
+        // Assigned by Klei's component injection (OnPrefabInit); initialized to satisfy the compiler.
         [MyCmpReq]
-        private LayoutElement layoutElement;
+        private LayoutElement layoutElement = null;
 
         [SerializeField]
         public float padding = 10f;

@@ -1,4 +1,4 @@
-﻿using FUtility;
+using FUtility;
 using FUtility.FUI;
 using PrintingPodRecharge.Content.Cmps;
 using PrintingPodRecharge.Content.Items;
@@ -107,7 +107,7 @@ namespace PrintingPodRecharge.UI
 			{
 				printer.inkTag = options[index].prefabID;
 
-				Log.Debuglog("dropdown changed to " + printer.inkTag);
+				Log.Debug("dropdown changed to " + printer.inkTag);
 				SetDescription(options[index].description);
 				actionButton.SetInteractable(true);
 			}
@@ -159,14 +159,14 @@ namespace PrintingPodRecharge.UI
 
 			foreach (var ink in Assets.GetPrefabsWithTag(ModAssets.Tags.bioInk))
 			{
-				Log.Debuglog("ink" + ink.PrefabID());
-				Log.Debuglog(ink.GetComponent<BundleModifier>() != null);
+				Log.Debug("ink" + ink.PrefabID());
+				Log.Debug(ink.GetComponent<BundleModifier>() != null);
 
 				var bundle = ink.GetComponent<BundleModifier>().bundle;
 
 				if (ImmigrationModifier.Instance.IsBundleAvailable(bundle))
 				{
-					Log.Debuglog("added ink " + ink.GetProperName());
+					Log.Debug("added ink " + ink.GetProperName());
 					options.Add(new Option(ink));
 				}
 			}
@@ -198,6 +198,16 @@ namespace PrintingPodRecharge.UI
 
 			if (printer == null)
 			{
+				return;
+			}
+
+			// Safety net: if OnPrefabInit failed to bind the UI (e.g. a corrupted prefab left dropdown
+			// null), bail out instead of throwing an NRE that propagates up through DetailsScreen.Refresh
+			// and crashes the entire object-selection system. The idempotent fix in
+			// SideScreen.AddCustomSideScreen should keep this from ever happening.
+			if (dropdown == null)
+			{
+				Log.Warning("BioInkSidescreen.SetTarget: dropdown is null (prefab not initialized); skipping.");
 				return;
 			}
 

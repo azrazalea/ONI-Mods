@@ -1,4 +1,4 @@
-﻿using FUtility;
+using FUtility;
 using HarmonyLib;
 using PrintingPodRecharge.Content.Cmps;
 using System;
@@ -37,7 +37,7 @@ namespace PrintingPodRecharge.Integration
                 }
 
                 Log.Info("Set up compatibility with Artifacts In Care Packages.)");
-                Log.Debuglog($"Eggs: {BundleLoader.bundleSettings.egg.EggCycle}, Rainbow eggs: {BundleLoader.bundleSettings.egg.RainbowEggCycle}");
+                Log.Debug($"Eggs: {BundleLoader.bundleSettings.egg.EggCycle}, Rainbow eggs: {BundleLoader.bundleSettings.egg.RainbowEggCycle}");
             }
         }
     }

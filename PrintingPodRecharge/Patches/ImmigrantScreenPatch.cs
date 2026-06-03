@@ -1,4 +1,4 @@
-﻿using FUtility;
+using FUtility;
 using HarmonyLib;
 using PrintingPodRecharge.Content.Cmps;
 using System;
@@ -65,7 +65,7 @@ namespace PrintingPodRecharge.Patches
 
             if (activeBundle == null || !activeBundle.replaceAnim)
             {
-                Log.Debuglog("Not replaceable anim for " + activeBundle?.bgAnim);
+                Log.Debug("Not replaceable anim for " + activeBundle?.bgAnim);
                 return;
             }
 

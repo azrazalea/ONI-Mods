@@ -12,7 +12,6 @@ namespace PrintingPodRecharge.UI
         private FInputField2 refundKgInput;
         private FToggle2 refundActiveToggle;
         private FToggle2 debugToggle;
-        private FToggle2 twitch;
         private FToggle2 coloredMeeps;
         private RainbowSlider randoChance;
         private FCycle randoCycler;

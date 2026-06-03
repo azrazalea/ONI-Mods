@@ -22,15 +22,16 @@ namespace PrintingPodRecharge.Content.Items
                 0.55f,
                 true);
 
+            // U59: the (id, dlcId, ...) ctor is obsolete; the dlcId became requiredDlcIds.
             var foodInfo = new EdiblesManager.FoodInfo(
                 ID,
-                DlcManager.VANILLA_ID,
                 800f * 1000f,
                 1,
                 255.15f,
                 277.15f,
                 2400f,
-                true);
+                true,
+                requiredDlcIds: new[] { DlcManager.VANILLA_ID });
 
             EntityTemplates.ExtendEntityToFood(prefab, foodInfo);
 
