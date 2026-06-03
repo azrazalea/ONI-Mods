@@ -22,7 +22,8 @@ namespace FUtility.Components
         [SerializeField]
         public bool stopOnLand = true;
 
-        [MyCmpGet] private KBatchedAnimController animController;
+        // Assigned by Klei's component injection; initialized to satisfy the compiler.
+        [MyCmpGet] private KBatchedAnimController animController = null;
 
         protected override void OnPrefabInit()
         {

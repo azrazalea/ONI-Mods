@@ -50,7 +50,8 @@ namespace FUtility.FUI
 					LT.fontStyle = data.FontStyle;
 					LT.fontSize = data.FontSize;
 					LT.maxVisibleLines = data.MaxVisibleLines;
-					LT.enableWordWrapping = data.EnableWordWrapping;
+					// U59 TMP: enableWordWrapping is obsolete; use textWrappingMode.
+					LT.textWrappingMode = data.EnableWordWrapping ? TextWrappingModes.Normal : TextWrappingModes.NoWrap;
 					LT.autoSizeTextContainer = data.AutoSizeTextContainer;
 					LT.text = "";
 					LT.color = new Color(data.Color[0], data.Color[1], data.Color[2]);

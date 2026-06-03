@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.IO;
@@ -19,7 +19,6 @@ namespace FUtility.SaveData
         private readonly string localPath;
         private readonly string externalPath;
         private readonly string externalFolder;
-        private readonly string externalRoot;
         private readonly string localFolder;
 
         private FileSystemWatcher watcher;
@@ -35,7 +34,7 @@ namespace FUtility.SaveData
             externalPath = Path.Combine(externalFolder, filename + ".json");
             localFolder = localPath;
 
-            Log.Debuglog("external path set to", externalPath);
+            Log.Debug("external path set to", externalPath);
 
             if (readImmediately)
             {
@@ -52,7 +51,7 @@ namespace FUtility.SaveData
         {
             if (watcher is null)
             {
-                Log.Debuglog(GetPath());
+                Log.Debug(GetPath());
 
                 watcher = new FileSystemWatcher
                 {
@@ -112,7 +111,7 @@ namespace FUtility.SaveData
             DirectoryInfo dir = new DirectoryInfo(path); // delete settings folder only if it is empty
             if (!Directory.EnumerateFileSystemEntries(path).Any())
             {
-                Log.Debuglog($"Deleting folder: {path}");
+                Log.Debug($"Deleting folder: {path}");
                 dir.Delete(false);
                 return true;
             }
@@ -164,7 +163,7 @@ namespace FUtility.SaveData
             if(!path.IsNullOrWhiteSpace())
             {
                 result = TryReadFile(path);
-                Log.Debuglog("Reading configurations from ", path);
+                Log.Debug("Reading configurations from ", path);
             }
 
             return !result.IsNullOrWhiteSpace();
@@ -197,7 +196,7 @@ namespace FUtility.SaveData
                 string path1 = useExternal ? externalPath : localPath;
                 File.WriteAllText(path1, json);
 
-                Log.Debuglog("saved config to " + path1);
+                Log.Debug("saved config to " + path1);
             }
             catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
             {

@@ -9,9 +9,6 @@ namespace FUtility.FUI
 	{
 		public const float SCREEN_SORT_KEY = 300f;
 
-#pragma warning disable IDE0051 // Remove unused private members
-		new bool ConsumeMouseScroll = true; // do not remove!!!!
-#pragma warning restore IDE0051 // Remove unused private members
 		private bool shown = false;
 		public bool pause = true;
 
@@ -23,6 +20,9 @@ namespace FUtility.FUI
 
 		protected override void OnPrefabInit()
 		{
+			// The base KScreen field must be set directly; the old `new bool ConsumeMouseScroll`
+			// shadowed it, so the dialog never actually consumed scroll input.
+			ConsumeMouseScroll = true;
 			SetObjects();
 			activateOnSpawn = true;
 			gameObject.SetActive(true);

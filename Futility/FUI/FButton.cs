@@ -11,11 +11,12 @@ namespace FUtility.FUI
         private bool interactable;
         private Material material;
 
+        // Assigned by Klei's component injection (OnPrefabInit); initialized to satisfy the compiler.
         [MyCmpReq]
-        private Image image;
+        private Image image = null;
 
         [MyCmpGet]
-        private Button button;
+        private Button button = null;
 
         [SerializeField]
         public Color disabledColor = new Color(0.78f, 0.78f, 0.78f);

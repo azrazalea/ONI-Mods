@@ -1,4 +1,4 @@
-﻿//using Harmony;
+//using Harmony;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -41,7 +41,14 @@ namespace FUtility.FUI
 			bool elementsReady = GetElements(out List<SideScreenRef> screens, out var tabs);
 			if (elementsReady)
 			{
-				var newScreen = prefab.AddComponent(typeof(T)) as SideScreenContent;
+				// DetailsScreen.OnPrefabInit fires on every world load / new game, and this method
+				// registers the shared asset-bundle prefab itself (it is never cloned). AddComponent-ing
+				// T again on each call stacks duplicate SideScreenContents onto the same prefab; the extra
+				// ones re-run OnPrefabInit against an already-mutated hierarchy, fail their transform.Find
+				// calls, and end up registered with null UI fields (e.g. a null dropdown) that crash the
+				// whole object-selection system on select. Add the component once and reuse it thereafter.
+				var newScreen = prefab.GetComponent(typeof(T)) as SideScreenContent
+					?? prefab.AddComponent(typeof(T)) as SideScreenContent;
 				screens.Add(NewSideScreen(name, newScreen));
 			}
 		}
@@ -71,7 +78,7 @@ namespace FUtility.FUI
 		{
 			foreach (var screen in screens)
 			{
-				Log.Debuglog(screen.name, screen?.screenPrefab.GetType());
+				Log.Debug(screen.name, screen?.screenPrefab.GetType());
 			}
 
 			var result = screens.Find(s => s.name == name).screenPrefab;
@@ -86,7 +93,7 @@ namespace FUtility.FUI
 		{
 			foreach (var screen in screens)
 			{
-				Log.Debuglog(screen.name, screen.GetType());
+				Log.Debug(screen.name, screen.GetType());
 			}
 
 			var result = screens.Find(s => s?.screenPrefab.GetType() == type)?.screenPrefab;

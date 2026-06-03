@@ -76,7 +76,9 @@ namespace FUtility
 			var kbac = go.GetComponent<KBatchedAnimController>();
 
 			if (kAnimLayering == null) kAnimLayering = AccessTools.FieldRefAccess<KBatchedAnimController, KAnimLayering>("layering");
-			if (foregroundController == null) AccessTools.FieldRefAccess<KAnimLayering, KAnimControllerBase>("foregroundController");
+			// Bug fix: the result was never assigned, so foregroundController stayed null and the
+			// dereference below always NRE'd (and the field warned as never-assigned).
+			if (foregroundController == null) foregroundController = AccessTools.FieldRefAccess<KAnimLayering, KAnimControllerBase>("foregroundController");
 
 			if (kAnimLayering == null || foregroundController == null)
 				return;

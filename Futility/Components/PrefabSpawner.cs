@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -68,7 +68,7 @@ namespace FUtility.Components
 
             itemCount = Random.Range(minCount, maxCount);
 
-            Log.Debuglog($"Spawned Spawner with {options.Count} options", itemCount );
+            Log.Debug($"Spawned Spawner with {options.Count} options", itemCount );
             StartCoroutine(SpawnStuff());
         }
 
@@ -79,14 +79,14 @@ namespace FUtility.Components
             while(itemsSpawned < itemCount) { 
                 if (beginSpawning)
                 {
-                    Log.Debuglog("Spawning started");
+                    Log.Debug("Spawning started");
                     var selectedItem = options.GetRandom();
                     var itemTag = selectedItem.Item2;
                     var amount = selectedItem.Item1;
 
                     if(spawnElementInWorld && ElementLoader.GetElement(itemTag) is Element element)
                     {
-                        Log.Debuglog("Spawning an element");
+                        Log.Debug("Spawning an element");
                         //SimMessages.AddElementChunk(Grid.PosToCell(this), element.id, element.defaultValues.mass, element.defaultValues.temperature, )
 
                         if (element.IsLiquid)
@@ -100,10 +100,10 @@ namespace FUtility.Components
                     }
                     else
                     {
-                        Log.Debuglog("Spawning an item");
+                        Log.Debug("Spawning an item");
                         var item = Utils.Spawn(itemTag, gameObject);
                         item.GetComponent<PrimaryElement>().Mass = amount;
-                        Log.Debuglog(item.PrefabID());
+                        Log.Debug(item.PrefabID());
                         Utils.YeetRandomly(item, yeetOnlyUp, yeetMin, yeetMax, rotate);
                         OnItemSpawned?.Invoke(item);
                     }
@@ -135,7 +135,7 @@ namespace FUtility.Components
 
         private void RemoveSelf()
         {
-            Log.Debuglog("Deleting self");
+            Log.Debug("Deleting self");
             StopAllCoroutines();
             Destroy(gameObject);
         }

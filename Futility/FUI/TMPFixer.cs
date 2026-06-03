@@ -9,8 +9,9 @@ namespace FUtility.FUI
         [SerializeField]
         public TextAlignmentOptions alignment;
 
+        // Assigned by Klei's component injection (OnSpawn); initialized to satisfy the compiler.
         [MyCmpReq]
-        private LocText text;
+        private LocText text = null;
 
         protected override void OnSpawn()
         {

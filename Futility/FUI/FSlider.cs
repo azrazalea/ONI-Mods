@@ -13,11 +13,6 @@ namespace FUtility.FUI
         public Slider slider;
         public FNumberInputField inputField;
 
-        private readonly float movePlayRate = 0.05f;
-        private float lastMoveTime;
-        private float lastMoveValue;
-        private bool playedBoundaryBump;
-
         public delegate float MapValue(float val);
         MapValue mapValue;
 

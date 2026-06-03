@@ -68,6 +68,13 @@ namespace FUtility
 			return this;
 		}
 
+		public EffectBuilder StompGroup(string stompGroup)
+		{
+			this.stompGroup = stompGroup;
+
+			return this;
+		}
+
 		public EffectBuilder Emote(string emoteAnim, float emoteCooldown)
 		{
 			this.emoteAnim = emoteAnim;
