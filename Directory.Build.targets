@@ -66,6 +66,21 @@ APIVersion: $(APIVersion)
       <DevModFiles Include="$(TargetDir)$(TargetName).dll;$(TargetDir)mod.yaml;$(TargetDir)mod_info.yaml" />
     </ItemGroup>
     <Copy SourceFiles="@(DevModFiles)" DestinationFolder="$(ModFolder)/$(TargetName)_dev" />
+    <!-- Runtime content (anim/assets/translations) isn't in the repo — sync it from the installed
+         workshop copy when the project declares its WorkshopId. archived_versions and the shipped
+         DLL/metadata are excluded; ours from above win. -->
+    <PropertyGroup Condition="'$(WorkshopId)' != ''">
+      <WorkshopModDir>$(ModFolder)/../Steam/$(WorkshopId)</WorkshopModDir>
+    </PropertyGroup>
+    <ItemGroup Condition="'$(WorkshopId)' != ''">
+      <WorkshopContentFiles
+        Include="$(WorkshopModDir)/**/*"
+        Exclude="$(WorkshopModDir)/*.dll;$(WorkshopModDir)/*.dll.orig;$(WorkshopModDir)/mod.yaml;$(WorkshopModDir)/mod_info.yaml;$(WorkshopModDir)/archived_versions/**" />
+    </ItemGroup>
+    <Copy Condition="'$(WorkshopId)' != ''"
+          SourceFiles="@(WorkshopContentFiles)"
+          DestinationFiles="@(WorkshopContentFiles->'$(ModFolder)/$(TargetName)_dev/%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
   </Target>
 	
 </Project>

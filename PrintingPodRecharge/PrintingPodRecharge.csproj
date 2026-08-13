@@ -19,6 +19,9 @@
 		<GenerateMetadata>true</GenerateMetadata>
 		<FUtility>true</FUtility>
 		<IsPacked>true</IsPacked>
+		<!-- Lets CopyModFiles (Directory.Build.targets) sync anim/assets/translations from the
+		     installed workshop copy into the dev deploy — that content isn't in the repo. -->
+		<WorkshopId>2869608898</WorkshopId>
 	</PropertyGroup>
 
 	<!-- Mod Info -->
