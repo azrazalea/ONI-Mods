@@ -3,9 +3,11 @@
 
 	<Target Name="WriteToFile" BeforeTargets="Build" Condition="'$(GenerateMetadata)' == 'true'">
 		<PropertyGroup>
+			<!-- Values are quoted: an unquoted "title: Foo: Bar" (colon in the value) is invalid
+			     YAML and makes the game reject the mod every boot (restart loop). -->
 			<ModContent>
-title: $(ModName)
-description: $(ModDescription)
+title: "$(ModName)"
+description: "$(ModDescription)"
 staticID: $(AssemblyName)
 			</ModContent>
 
@@ -21,9 +23,11 @@ APIVersion: $(APIVersion)
 			
 			<!-- pre 2025 March QoL builds expect a supportedContent property-->
 			<!-- <ModInfoContent Condition="$(MinimumSupportedBuild) &lt; $(QoL2025Mar)"> -->
+			<!-- Trim(): XML pretty-printing inside the property (newlines/tabs around the value)
+			     would otherwise leak into the YAML. -->
 			<ModInfoContent>
-supportedContent: $(SupportedContent)
-minimumSupportedBuild: $(MinimumSupportedBuild)
+supportedContent: $(SupportedContent.Trim())
+minimumSupportedBuild: $(MinimumSupportedBuild.Trim())
 version: $(FileVersion)
 APIVersion: $(APIVersion)
 			</ModInfoContent>
