@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
 	<PropertyGroup>
-		<SteamFolder>C:\Program Files (x86)\Steam</SteamFolder>
-		<GameLibsFolder>$(SteamFolder)\steamapps\common\OxygenNotIncluded\OxygenNotIncluded_Data\Managed</GameLibsFolder>
+		<SteamFolder Condition="'$(OS)' == 'Windows_NT'">C:\Program Files (x86)\Steam</SteamFolder>
+		<SteamFolder Condition="'$(OS)' != 'Windows_NT'">$(HOME)/.steam/debian-installation</SteamFolder>
+		<GameLibsFolder>$(SteamFolder)/steamapps/common/OxygenNotIncluded/OxygenNotIncluded_Data/Managed</GameLibsFolder>
 		<PublicisedFolder>D:\Modding\OxygenNotIncluded\PublicisedLib</PublicisedFolder>
-		<ModFolder>$(UserProfile)\Documents\Klei\OxygenNotIncluded\mods\dev</ModFolder>
+		<ModFolder Condition="'$(OS)' == 'Windows_NT'">$(UserProfile)\Documents\Klei\OxygenNotIncluded\mods\dev</ModFolder>
+		<ModFolder Condition="'$(OS)' != 'Windows_NT'">$(HOME)/.config/unity3d/Klei/Oxygen Not Included/mods/Dev</ModFolder>
 		<FUtilityPath>$(UserProfile)\source\repos\FUtility\FUtility\bin\Debug\net48\FUtility.dll</FUtilityPath>
 		<ClearOutputDirectory>True</ClearOutputDirectory>
 		<Optimize>true</Optimize>
@@ -86,7 +88,8 @@
 	<ItemGroup Condition="'$(FUtility)' == 'true' ">
 		<!-- No ExcludeAssets: let FUtility.dll land in the output dir so ILRepack bundles it into the
 		     mod (matches how the shipped PrintingPodRecharge.dll has FUtility merged in). -->
-		<ProjectReference Include="..\FUtility\FUtility.csproj" />
+		<!-- NB: the directory is "Futility" (lowercase t) — case matters on Linux. -->
+		<ProjectReference Include="..\Futility\FUtility.csproj" />
 	</ItemGroup>
 	
 	<ItemGroup Condition="'$(FUtility2)' == 'true' ">
@@ -97,7 +100,9 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(IsPacked)' == 'true'">
-		<PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.2" />
+		<!-- 2.0.18.2 only shipped a full-framework task (needs VS MSBuild); 2.0.46 also supports
+		     the .NET SDK's MSBuild, so plain `dotnet build` can run the ILRepack step. -->
+		<PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.46" />
 	</ItemGroup>
 
 

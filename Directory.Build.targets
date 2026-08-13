@@ -35,6 +35,9 @@ APIVersion: $(APIVersion)
 	</Target>
 
 	<Target Name="ILRepack" AfterTargets="Build" Condition="'$(IsPacked)' == 'true'">
+		<PropertyGroup>
+			<ILRepackTargetPlatform Condition="'$(OS)' == 'Windows_NT'">v4</ILRepackTargetPlatform>
+		</PropertyGroup>
 		<ItemGroup>
 			<InputAssemblies Include="$(TargetPath)" />
 			<InputAssemblies
@@ -42,8 +45,10 @@ APIVersion: $(APIVersion)
 			  Exclude="**/0Harmony.dll; **/System.*; **/Microsoft.*; **/UnityEngine.*; $(TargetPath)" />
 		</ItemGroup>
 	  
+    <!-- TargetPlatformVersion="v4" only resolves on Windows (needs a .NET Framework reference
+         directory); set it there, omit elsewhere so ILRepack infers from the primary assembly. -->
     <ILRepack
-      TargetPlatformVersion="v4"
+      TargetPlatformVersion="$([MSBuild]::ValueOrDefault('$(ILRepackTargetPlatform)', ''))"
       TargetKind="SameAsPrimaryAssembly"
       InputAssemblies="@(InputAssemblies)"
       Wildcards="true"
@@ -56,9 +61,11 @@ APIVersion: $(APIVersion)
        to copy, so this used to xcopy only the DLL and leave a metadata-less mod in mods\dev that crashes
        the Mod Manager. We deploy by copying the DLL into the real mod folder ourselves instead. -->
   <Target Name="CopyModFiles" AfterTargets="ILRepack" Condition="'$(DeployDevMod)' == 'true' and '$(AssemblyName)' != 'FUtility' and '$(AssemblyName)' != 'FUtilityArt'">
-    <Exec Command="xcopy /yqsr &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(ModFolder)\$(TargetName)_dev\&quot;"/>
-    <Exec Command="xcopy /yqsr &quot;$(TargetDir)mod.yaml&quot; &quot;$(ModFolder)\$(TargetName)_dev\&quot;"/>
-    <Exec Command="xcopy /yqsr &quot;$(TargetDir)mod_info.yaml&quot; &quot;$(ModFolder)\$(TargetName)_dev\&quot;"/>
+    <!-- MSBuild Copy instead of xcopy so this works on Linux too. -->
+    <ItemGroup>
+      <DevModFiles Include="$(TargetDir)$(TargetName).dll;$(TargetDir)mod.yaml;$(TargetDir)mod_info.yaml" />
+    </ItemGroup>
+    <Copy SourceFiles="@(DevModFiles)" DestinationFolder="$(ModFolder)/$(TargetName)_dev" />
   </Target>
 	
 </Project>
