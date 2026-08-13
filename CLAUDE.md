@@ -2,10 +2,38 @@
 
 Local working notes for building the mods we actually touch here — primarily
 **PrintingPodRecharge** (the "Bio-Inks: Rechargeable Printing Pod" mod). Game target:
-ONI U59 beta (Spaced Out). Read this before fighting the build; the ILRepack step has
-two non-obvious gotchas that cost a lot of time to rediscover.
+ONI U59 (Spaced Out). Read this before fighting the build; the ILRepack step has
+non-obvious gotchas that cost a lot of time to rediscover.
 
-## TL;DR — build PrintingPodRecharge (the bundled, deployable DLL)
+## TL;DR — Linux (Slimbook, primary since 2026-08)
+
+Plain `dotnet build` works end-to-end here, ILRepack included:
+
+```bash
+cd ~/git-repos/aki-oni-mods
+~/.dotnet/dotnet build PrintingPodRecharge/PrintingPodRecharge.csproj -c Release2
+```
+
+- ILRepack works under the .NET SDK because we bumped `ILRepack.Lib.MSBuild.Task` to **2.0.46**
+  (2.0.18.2 was full-framework-only — that's what forced VS2022 MSBuild on Windows; both Windows
+  gotchas below are historical on Linux).
+- Paths are OS-conditional in `Directory.Build.props` (Steam at `~/.steam/debian-installation`,
+  mods dev folder under `~/.config/unity3d/Klei/Oxygen Not Included/mods/Dev`).
+- `Lib/ONITwitchLib.dll` is gitignored — fetch per `Lib/README.md` if missing.
+- The FUtility directory is `Futility/` (lowercase t) — case matters on Linux; the
+  `ProjectReference` in `Directory.Build.props` uses the real casing.
+- Same output/verification as Windows: `PrintingPodRecharge/bin/PrintingPodRecharge.dll`,
+  **~230 KB** = FUtility merged; ~146 KB = ILRepack didn't run.
+- Deploy: overwrite the workshop copy (backup kept), game fully closed:
+  ```bash
+  M=~/.config/unity3d/Klei/"Oxygen Not Included"/mods/Steam/2869608898
+  [ -f "$M/PrintingPodRecharge.dll.orig" ] || cp "$M/PrintingPodRecharge.dll" "$M/PrintingPodRecharge.dll.orig"
+  cp PrintingPodRecharge/bin/PrintingPodRecharge.dll "$M/"
+  ```
+- The recipes.json shadowing gotcha (below) applies identically; the Linux path is
+  `~/.config/unity3d/Klei/"Oxygen Not Included"/mods/config/PrintingPodRecharge/data/recipes.json`.
+
+## TL;DR — Windows (gaming desktop) — build PrintingPodRecharge (the bundled, deployable DLL)
 
 Use **full-framework MSBuild from Visual Studio 2022**, and run **restore and build as
 SEPARATE invocations**:
