@@ -24,16 +24,15 @@ cd ~/git-repos/aki-oni-mods
   `ProjectReference` in `Directory.Build.props` uses the real casing.
 - Same output/verification as Windows: `PrintingPodRecharge/bin/PrintingPodRecharge.dll`,
   **~230 KB** = FUtility merged; ~146 KB = ILRepack didn't run.
-- Deploy: standalone copy in the game's Dev mods folder (preferred — never touches the
-  workshop install). The anim/assets/translations content must ride along, since the DLL
-  loads it from the mod folder:
+- Deploy: build with `-p:DeployDevMod=true` — the `CopyModFiles` target assembles a complete
+  standalone mod in the game's Dev folder (`mods/Dev/PrintingPodRecharge_dev`): our DLL +
+  generated yamls, plus anim/assets/translations synced from the installed workshop copy
+  (that content isn't in the repo; the project's `WorkshopId` property says where to find it):
   ```bash
-  M=~/.config/unity3d/Klei/"Oxygen Not Included"/mods/Steam/2869608898
-  D=~/.config/unity3d/Klei/"Oxygen Not Included"/mods/Dev/PrintingPodRecharge_dev
-  mkdir -p "$D" && cp -r "$M/anim" "$M/assets" "$M/translations" "$D/"
-  cp PrintingPodRecharge/bin/{PrintingPodRecharge.dll,mod.yaml,mod_info.yaml} "$D/"
+  ~/.dotnet/dotnet build PrintingPodRecharge/PrintingPodRecharge.csproj -c Release2 -p:DeployDevMod=true
   ```
-  Same staticID as the Steam copy — disable the Steam one in the mods screen while testing.
+  Never touches the workshop install. Same staticID as the Steam copy — disable the Steam one
+  in the mods screen while testing.
 - The recipes.json shadowing gotcha (below) applies identically; the Linux path is
   `~/.config/unity3d/Klei/"Oxygen Not Included"/mods/config/PrintingPodRecharge/data/recipes.json`.
 
